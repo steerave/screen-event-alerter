@@ -1,0 +1,58 @@
+window_title: "Last War"
+
+# Hard requirement: do not resize the game window after setting these.
+# Moving the window is fine. Resizing breaks all ROIs and templates silently.
+window_width: 1280
+window_height: 720
+
+# Default: 2 FPS (500ms worst-case detection lag). Sufficient for events that
+# persist for several seconds. Increase to 5 only for events that disappear in
+# under 1 second.
+poll_fps: 2
+
+# true: print confidence scores every poll; save annotated screenshots on detection
+debug_mode: false
+
+events:
+  - name: "dig_event"
+
+    # Detection mode: only "template" is implemented in v1.
+    # Reserved for future modes: baseline_diff, hybrid.
+    detection_mode: template
+
+    # Multiple templates: scorer picks the best match across all.
+    # Add variants for different game states (base view vs world view).
+    templates:
+      - "templates/dig_event.png"
+
+    roi:
+      # Window-relative pixel coordinates (relative to game window client area).
+      # PLACEHOLDER — update these after running calibrate.py.
+      x: 100
+      y: 400
+      w: 100
+      h: 100
+
+    # Confidence threshold 0.0–1.0.
+    # Rule: set to (lowest observed positive score) minus 0.10.
+    threshold: 0.85
+
+    # Frames continuously above threshold before alert fires.
+    # At 2 FPS: 2 hits = icon must be visible ~500ms. Set to 1 for max speed.
+    consecutive_hits_required: 2
+
+    # Seconds before this event can fire again (secondary anti-spam guard).
+    # Primary guard is rising-edge: icon must disappear and reappear.
+    cooldown_seconds: 60
+
+    # Skip matchTemplate if mean ROI brightness is below 10.
+    # Disable if the event icon appears against a very dark background.
+    blank_prefilter: true
+
+    alert_sound: true
+    alert_sound_frequency: 1000   # Hz (1000 = middle beep)
+    alert_sound_duration: 300     # milliseconds
+
+    alert_toast: true
+    alert_slack: false
+    slack_message: "Dig event detected in Last War"

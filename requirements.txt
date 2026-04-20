@@ -1,0 +1,10 @@
+pywin32
+mss
+opencv-python
+numpy
+PyYAML
+python-dotenv
+requests
+win10toast
+pytest
+pytest-mock

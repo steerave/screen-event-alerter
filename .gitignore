@@ -1,0 +1,19 @@
+# Secrets
+.env
+.env.*
+!.env.template
+
+# Runtime output — never commit these
+debug_screenshots/
+debug_crops/
+
+# Logs & cache
+logs/
+*.log
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
