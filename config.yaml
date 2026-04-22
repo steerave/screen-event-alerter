@@ -61,5 +61,5 @@ events:
     alert_sound_duration: 300     # milliseconds
 
     alert_toast: true
-    alert_slack: false
+    alert_slack: true
     slack_message: "Dig event detected in Last War"
