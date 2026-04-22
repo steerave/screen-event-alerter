@@ -56,10 +56,11 @@ class EventConfig:
     alert_toast: bool
     alert_slack: bool
     slack_message: str
+    grayscale: bool
     detector: Detector = field(init=False)
 
     def __post_init__(self):
-        self.detector = Detector(self.templates)
+        self.detector = Detector(self.templates, grayscale=self.grayscale)
 
 
 def validate_config(config: dict) -> list[str]:
@@ -142,6 +143,7 @@ def load_events(config: dict, log: logging.Logger) -> list[EventConfig]:
                 alert_toast=raw.get("alert_toast", True),
                 alert_slack=raw.get("alert_slack", False),
                 slack_message=raw.get("slack_message", raw["name"]),
+                grayscale=raw.get("grayscale", True),
             )
             loaded.append(evt)
             log.info(f"Loaded '{evt.name}' with {len(evt.templates)} template(s)")

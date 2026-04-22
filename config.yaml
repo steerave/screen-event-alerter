@@ -2,8 +2,8 @@ window_title: "Last War"
 
 # Hard requirement: do not resize the game window after setting these.
 # Moving the window is fine. Resizing breaks all ROIs and templates silently.
-window_width: 1280
-window_height: 720
+window_width: 1266
+window_height: 710
 
 # Default: 2 FPS (500ms worst-case detection lag). Sufficient for events that
 # persist for several seconds. Increase to 5 only for events that disappear in
@@ -25,17 +25,24 @@ events:
     templates:
       - "templates/dig_event.png"
 
+    # false = color matching (BGR). Better when icon color is the primary
+    # discriminator vs false-positive sources. true = grayscale (default).
+    grayscale: false
+
     roi:
-      # Window-relative pixel coordinates (relative to game window client area).
-      # PLACEHOLDER — update these after running calibrate.py.
-      x: 100
-      y: 400
-      w: 100
-      h: 100
+      # Derived from template match against SS - Dig.png (icon at screenshot 739,603;
+      # client origin at 1,2). Padded 30px each side around the 47x57 icon.
+      x: 708
+      y: 571
+      w: 107
+      h: 117
 
     # Confidence threshold 0.0–1.0.
-    # Rule: set to (lowest observed positive score) minus 0.10.
-    threshold: 0.85
+    # Calibrated 2026-04-22 in color mode (grayscale: false):
+    #   dig event present: ~0.795
+    #   worst announcement false positive: ~0.640
+    #   threshold set at midpoint with equal margins (~0.075 each side)
+    threshold: 0.72
 
     # Frames continuously above threshold before alert fires.
     # At 2 FPS: 2 hits = icon must be visible ~500ms. Set to 1 for max speed.

@@ -76,9 +76,11 @@ def main() -> None:
     detectors: list[tuple[dict, Detector]] = []
     for evt in events:
         templates = evt.get("templates", [])
+        grayscale = evt.get("grayscale", True)
         try:
-            detectors.append((evt, Detector(templates)))
-            print(f"Loaded {len(templates)} template(s) for '{evt['name']}':")
+            detectors.append((evt, Detector(templates, grayscale=grayscale)))
+            mode = "grayscale" if grayscale else "color"
+            print(f"Loaded {len(templates)} template(s) for '{evt['name']}' ({mode}):")
             for t in templates:
                 print(f"  {t}")
         except (FileNotFoundError, ValueError) as e:
