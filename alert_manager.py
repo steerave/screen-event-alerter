@@ -18,10 +18,17 @@ class AlertManager:
     def __init__(self, debug_dir: str = "debug_screenshots"):
         self._debug_dir = debug_dir
 
-    def fire_sound(self, frequency: int = 1000, duration: int = 300) -> None:
-        """Play a beep. Configurable frequency (Hz) and duration (ms)."""
+    def fire_sound(
+        self,
+        frequency: int = 1000,
+        duration: int = 300,
+        sound_name: str | None = None,
+    ) -> None:
         try:
-            winsound.Beep(frequency, duration)
+            if sound_name:
+                winsound.PlaySound(sound_name, winsound.SND_ALIAS | winsound.SND_ASYNC)
+            else:
+                winsound.Beep(frequency, duration)
         except Exception:
             pass
 

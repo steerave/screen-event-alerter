@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+
+- `alert_sound_name` per-event config option — plays a Windows system sound (e.g. `SystemExclamation`) instead of the raw beep, which is far more noticeable through speakers
+
 ## [0.1.0] - 2026-04-20
 
 ### Added

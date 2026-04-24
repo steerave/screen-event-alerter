@@ -63,9 +63,10 @@ Per-event settings:
 | `consecutive_hits_required` | Frames above threshold before alert fires (default: 2) |
 | `cooldown_seconds` | Minimum seconds between alerts for this event (default: 60) |
 | `blank_prefilter` | Skip detection on near-black frames (disable for dark-background icons) |
-| `alert_sound` | Play a beep on detection |
-| `alert_sound_frequency` | Beep frequency in Hz (default: 1000) |
-| `alert_sound_duration` | Beep duration in milliseconds (default: 300) |
+| `alert_sound` | Play a sound on detection |
+| `alert_sound_name` | Windows system sound alias to play (e.g. `SystemExclamation`, `SystemHand`, `SystemAsterisk`). When set, overrides the beep below |
+| `alert_sound_frequency` | Beep frequency in Hz (default: 1000) — only used when `alert_sound_name` is not set |
+| `alert_sound_duration` | Beep duration in milliseconds (default: 300) — only used when `alert_sound_name` is not set |
 | `alert_toast` | Show Windows toast notification |
 | `alert_slack` | POST to Slack webhook |
 | `slack_message` | Message text for toast and Slack |
