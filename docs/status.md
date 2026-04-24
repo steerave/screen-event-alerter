@@ -3,18 +3,19 @@
 ## 2026-04-24
 
 **Done:**
-- Added `alert_sound_name` per-event config option to play a Windows system sound (e.g. `SystemExclamation`) instead of the raw `winsound.Beep` — much more noticeable through speakers
-- Updated `alert_manager.py` `fire_sound()` to use `winsound.PlaySound` with `SND_ALIAS | SND_ASYNC` when `sound_name` is set
-- Updated `watcher.py` `EventConfig` and `load_events` to carry `alert_sound_name` through to the alert call
-- Set `alert_sound_name: SystemExclamation` as default in `config.yaml`
+- Polished GitHub repo (`screen-event-alerter`): added description, 8 topics (python, opencv, computer-vision, etc.), badges, screenshot table, and "How It Works" pipeline diagram to README
+- Added `alert_beep_pattern` per-event config option — plays a `[freq, dur]` sequence in a daemon thread; more attention-grabbing than any single system sound
+- Added `alert_sound_file` per-event config option — plays any `.wav` file via `SND_FILENAME | SND_ASYNC`; takes priority over beep_pattern and sound_name
+- Switched `dig_event` alert to `C:/Windows/Media/Alarm01.wav` — confirmed audible and distinct from all standard Windows system sounds
+- Added 3 new tests (pattern plays all tones, pattern error resilience, wav file path); test suite at 14 passing
 
 **In Progress:**
-- GitHub remote not yet configured — commit is local only (`git push` failed with no remote)
+- Nothing — all sound work committed and pushed
 
 **Next:**
-- Set up GitHub remote: `gh repo create lastwar-alert-system --public --source=. --push`
-- Test `SystemExclamation` sound during a live dig event detection to confirm it's audible enough; try `SystemHand` if not
+- Run watcher live against a real dig event to confirm `Alarm01.wav` fires correctly end-to-end
+- Consider adding a second event (e.g. announcement) with a different alarm variant to distinguish event types by sound
 
 **Notes:**
-- Python process (PID 12488) confirmed running during session — watcher survived a terminal resize
-- `alert_sound_frequency` and `alert_sound_duration` remain as beep fallback when `alert_sound_name` is absent or blank
+- Sound priority in `fire_sound()`: `alert_sound_file` → `alert_beep_pattern` → `alert_sound_name` → beep fallback
+- `Alarm01.wav`–`Alarm10.wav` and `Ring01.wav`–`Ring10.wav` are all available in `C:/Windows/Media/` if a different tone is ever needed
