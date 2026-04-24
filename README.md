@@ -1,6 +1,8 @@
-# Last War Alert Watcher
+# Screen Event Alerter
 
-A lightweight Windows background tool that watches a specific pixel region inside the Last War game window and fires local alerts (sound + Windows toast) with optional Slack backup when a known event icon appears on screen.
+A lightweight Windows computer vision alerting system. Monitors a configurable region of any application window using OpenCV template matching and fires multi-channel alerts — sound, Windows toast notification, and Slack webhook — the moment a known visual pattern appears on screen.
+
+Built as a personal productivity tool to catch time-sensitive events in the mobile strategy game Last War: Survival, but the core engine is application-agnostic and reusable for any window.
 
 ---
 
