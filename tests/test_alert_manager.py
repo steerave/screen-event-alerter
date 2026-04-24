@@ -16,6 +16,24 @@ class TestAlertManager:
         with patch("winsound.Beep", side_effect=Exception("audio error")):
             mgr.fire_sound(frequency=1000, duration=300)   # must not raise
 
+    def test_fire_sound_beep_pattern_plays_all_tones_in_order(self):
+        mgr = AlertManager()
+        pattern = [[600, 80], [900, 80], [1200, 180]]
+        with patch("winsound.Beep") as mock_beep:
+            mgr.fire_sound(beep_pattern=pattern)
+            time.sleep(0.1)   # wait for daemon thread
+        assert mock_beep.call_count == 3
+        mock_beep.assert_any_call(600, 80)
+        mock_beep.assert_any_call(900, 80)
+        mock_beep.assert_any_call(1200, 180)
+
+    def test_fire_sound_beep_pattern_does_not_raise_on_failure(self):
+        mgr = AlertManager()
+        pattern = [[600, 80], [900, 80]]
+        with patch("winsound.Beep", side_effect=Exception("audio error")):
+            mgr.fire_sound(beep_pattern=pattern)
+            time.sleep(0.1)   # must not raise from thread
+
     def test_fire_toast_does_not_raise_when_unavailable(self):
         mgr = AlertManager()
         with patch("alert_manager._TOAST_AVAILABLE", False):

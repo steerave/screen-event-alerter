@@ -23,14 +23,26 @@ class AlertManager:
         frequency: int = 1000,
         duration: int = 300,
         sound_name: str | None = None,
+        beep_pattern: list[list[int]] | None = None,
     ) -> None:
-        try:
-            if sound_name:
+        if beep_pattern:
+            def _play_pattern():
+                try:
+                    for freq, dur in beep_pattern:
+                        winsound.Beep(int(freq), int(dur))
+                except Exception:
+                    pass
+            threading.Thread(target=_play_pattern, daemon=True).start()
+        elif sound_name:
+            try:
                 winsound.PlaySound(sound_name, winsound.SND_ALIAS | winsound.SND_ASYNC)
-            else:
+            except Exception:
+                pass
+        else:
+            try:
                 winsound.Beep(frequency, duration)
-        except Exception:
-            pass
+            except Exception:
+                pass
 
     def fire_toast(self, title: str, message: str) -> None:
         """Show a Windows toast notification (non-blocking via threaded=True)."""

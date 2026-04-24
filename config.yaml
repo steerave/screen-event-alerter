@@ -57,12 +57,16 @@ events:
     blank_prefilter: true
 
     alert_sound: true
-    # Windows system sound alias (e.g. SystemExclamation, SystemHand, SystemAsterisk).
-    # When set, plays that sound instead of the raw beep below.
-    # Remove or leave blank to use the beep fallback.
-    alert_sound_name: SystemExclamation
-    alert_sound_frequency: 1000   # Hz — only used when alert_sound_name is not set
-    alert_sound_duration: 300     # milliseconds — only used when alert_sound_name is not set
+    # Three-tone ascending pattern: low-mid-high. More distinctive than a single
+    # system sound. Each entry is [frequency_hz, duration_ms].
+    # Remove to fall back to alert_sound_name or alert_sound_frequency/duration.
+    alert_beep_pattern:
+      - [600, 80]
+      - [900, 80]
+      - [1200, 180]
+    # alert_sound_name: SystemExclamation   # uncomment to use a Windows system sound instead
+    alert_sound_frequency: 1000   # Hz — fallback when neither pattern nor name is set
+    alert_sound_duration: 300     # milliseconds — fallback only
 
     alert_toast: true
     alert_slack: true

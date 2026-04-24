@@ -54,6 +54,7 @@ class EventConfig:
     alert_sound_name: str | None
     alert_sound_frequency: int
     alert_sound_duration: int
+    alert_beep_pattern: list[list[int]] | None
     alert_toast: bool
     alert_slack: bool
     slack_message: str
@@ -142,6 +143,7 @@ def load_events(config: dict, log: logging.Logger) -> list[EventConfig]:
                 alert_sound_name=raw.get("alert_sound_name"),
                 alert_sound_frequency=raw.get("alert_sound_frequency", 1000),
                 alert_sound_duration=raw.get("alert_sound_duration", 300),
+                alert_beep_pattern=raw.get("alert_beep_pattern"),
                 alert_toast=raw.get("alert_toast", True),
                 alert_slack=raw.get("alert_slack", False),
                 slack_message=raw.get("slack_message", raw["name"]),
@@ -292,6 +294,7 @@ def main() -> None:
                             frequency=evt.alert_sound_frequency,
                             duration=evt.alert_sound_duration,
                             sound_name=evt.alert_sound_name,
+                            beep_pattern=evt.alert_beep_pattern,
                         )
 
                     if evt.alert_toast:
