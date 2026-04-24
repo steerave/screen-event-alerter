@@ -51,6 +51,7 @@ class EventConfig:
     cooldown_seconds: int
     blank_prefilter: bool
     alert_sound: bool
+    alert_sound_file: str | None
     alert_sound_name: str | None
     alert_sound_frequency: int
     alert_sound_duration: int
@@ -140,6 +141,7 @@ def load_events(config: dict, log: logging.Logger) -> list[EventConfig]:
                 cooldown_seconds=raw.get("cooldown_seconds", 60),
                 blank_prefilter=raw.get("blank_prefilter", True),
                 alert_sound=raw.get("alert_sound", True),
+                alert_sound_file=raw.get("alert_sound_file"),
                 alert_sound_name=raw.get("alert_sound_name"),
                 alert_sound_frequency=raw.get("alert_sound_frequency", 1000),
                 alert_sound_duration=raw.get("alert_sound_duration", 300),
@@ -293,6 +295,7 @@ def main() -> None:
                         alert_mgr.fire_sound(
                             frequency=evt.alert_sound_frequency,
                             duration=evt.alert_sound_duration,
+                            sound_file=evt.alert_sound_file,
                             sound_name=evt.alert_sound_name,
                             beep_pattern=evt.alert_beep_pattern,
                         )

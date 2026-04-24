@@ -1,4 +1,5 @@
 import time
+import winsound
 import numpy as np
 from unittest.mock import patch, MagicMock
 from alert_manager import AlertManager
@@ -15,6 +16,15 @@ class TestAlertManager:
         mgr = AlertManager()
         with patch("winsound.Beep", side_effect=Exception("audio error")):
             mgr.fire_sound(frequency=1000, duration=300)   # must not raise
+
+    def test_fire_sound_plays_wav_file_when_sound_file_set(self):
+        mgr = AlertManager()
+        with patch("winsound.PlaySound") as mock_play:
+            mgr.fire_sound(sound_file="C:/Windows/Media/Alarm01.wav")
+            mock_play.assert_called_once_with(
+                "C:/Windows/Media/Alarm01.wav",
+                winsound.SND_FILENAME | winsound.SND_ASYNC,
+            )
 
     def test_fire_sound_beep_pattern_plays_all_tones_in_order(self):
         mgr = AlertManager()

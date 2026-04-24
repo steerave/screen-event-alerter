@@ -98,9 +98,10 @@ Per-event settings:
 | `cooldown_seconds` | Minimum seconds between alerts for this event (default: 60) |
 | `blank_prefilter` | Skip detection on near-black frames (disable for dark-background icons) |
 | `alert_sound` | Play a sound on detection |
-| `alert_beep_pattern` | List of `[frequency_hz, duration_ms]` pairs played in sequence (most distinctive option). Overrides `alert_sound_name` and the single-beep fallback when set |
-| `alert_sound_name` | Windows system sound alias (e.g. `SystemExclamation`, `SystemHand`). Used when `alert_beep_pattern` is not set |
-| `alert_sound_frequency` | Beep frequency in Hz (default: 1000) — fallback when neither pattern nor name is set |
+| `alert_sound_file` | Path to a `.wav` file to play (e.g. `C:/Windows/Media/Alarm01.wav`). Highest priority — overrides all other sound options |
+| `alert_beep_pattern` | List of `[frequency_hz, duration_ms]` pairs played in sequence. Used when `alert_sound_file` is not set |
+| `alert_sound_name` | Windows system sound alias (e.g. `SystemExclamation`, `SystemHand`). Used when neither file nor pattern is set |
+| `alert_sound_frequency` | Beep frequency in Hz (default: 1000) — fallback only |
 | `alert_sound_duration` | Beep duration in milliseconds (default: 300) — fallback only |
 | `alert_toast` | Show Windows toast notification |
 | `alert_slack` | POST to Slack webhook |

@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - `alert_sound_name` per-event config option — plays a Windows system sound (e.g. `SystemExclamation`) instead of the raw beep, which is far more noticeable through speakers
 - `alert_beep_pattern` per-event config option — plays a sequence of `[frequency, duration]` beep tones in a daemon thread; more distinctive than any single sound. Default config uses a 3-tone ascending pattern (600 → 900 → 1200 Hz)
+- `alert_sound_file` per-event config option — plays any `.wav` file directly (e.g. `C:/Windows/Media/Alarm01.wav`); takes priority over all other sound options. Default config now uses `Alarm01.wav`
 
 ## [0.1.0] - 2026-04-20
 

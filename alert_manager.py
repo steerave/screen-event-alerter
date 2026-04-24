@@ -23,6 +23,7 @@ class AlertManager:
         frequency: int = 1000,
         duration: int = 300,
         sound_name: str | None = None,
+        sound_file: str | None = None,
         beep_pattern: list[list[int]] | None = None,
     ) -> None:
         if beep_pattern:
@@ -33,6 +34,11 @@ class AlertManager:
                 except Exception:
                     pass
             threading.Thread(target=_play_pattern, daemon=True).start()
+        elif sound_file:
+            try:
+                winsound.PlaySound(sound_file, winsound.SND_FILENAME | winsound.SND_ASYNC)
+            except Exception:
+                pass
         elif sound_name:
             try:
                 winsound.PlaySound(sound_name, winsound.SND_ALIAS | winsound.SND_ASYNC)
