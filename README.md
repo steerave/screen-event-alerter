@@ -1,8 +1,40 @@
 # Screen Event Alerter
 
-A lightweight Windows computer vision alerting system. Monitors a configurable region of any application window using OpenCV template matching and fires multi-channel alerts — sound, Windows toast notification, and Slack webhook — the moment a known visual pattern appears on screen.
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-0078D4?logo=windows&logoColor=white)
+![OpenCV](https://img.shields.io/badge/OpenCV-template%20matching-5C3EE8?logo=opencv&logoColor=white)
+![Alerts](https://img.shields.io/badge/Alerts-Sound%20%7C%20Toast%20%7C%20Slack-brightgreen)
 
-Built as a personal productivity tool to catch time-sensitive events in the mobile strategy game Last War: Survival, but the core engine is application-agnostic and reusable for any window.
+A lightweight Windows computer vision tool that monitors a configurable region of any application window using OpenCV template matching and fires multi-channel alerts — sound, Windows toast notification, and Slack webhook — the moment a known visual pattern appears on screen.
+
+Built to catch time-sensitive events in the mobile strategy game **Last War: Survival** while working at a second monitor, but the core detection engine is application-agnostic and reusable for any window.
+
+---
+
+## In Action
+
+| Dig event detected | Announcement event detected |
+|---|---|
+| ![Dig event](docs/images/dig-event.png) | ![Announcement event](docs/images/announcement-event.png) |
+
+---
+
+## How It Works
+
+```
+Screen capture (mss, DPI-aware)
+  └─ ROI crop (configurable x/y/w/h per event)
+       └─ OpenCV template match (normalized cross-correlation, grayscale)
+            └─ Rising-edge state machine (EventState)
+                 ├─ Consecutive-hit filter  →  suppress single-frame false positives
+                 ├─ Cooldown guard          →  suppress repeat alerts
+                 └─ Multi-channel alert
+                      ├─ Sound (Windows system sound or beep)
+                      ├─ Toast notification (win10toast)
+                      └─ Slack webhook (requests)
+```
+
+The detector never fires twice for the same persistent icon — the `EventState` machine tracks absent → present transitions and re-arms only after the icon leaves the frame.
 
 ---
 
@@ -24,7 +56,7 @@ Built as a personal productivity tool to catch time-sensitive events in the mobi
 
 - Windows 10/11
 - Python 3.10+
-- Last War game window visible and unobstructed while the watcher runs
+- Target application window visible and unobstructed while the watcher runs
 
 Install dependencies:
 
@@ -50,8 +82,8 @@ Key settings:
 
 | Setting | Description |
 |---|---|
-| `window_title` | Substring of the game window title (partial match, case-insensitive) |
-| `window_width` / `window_height` | Game window client size in pixels — **do not resize after setting** |
+| `window_title` | Substring of the target window title (partial match, case-insensitive) |
+| `window_width` / `window_height` | Window client size in pixels — **do not resize after setting** |
 | `poll_fps` | How often to check the screen (default: 2) |
 | `debug_mode` | `true` to log scores per poll and save debug screenshots |
 
@@ -60,7 +92,7 @@ Per-event settings:
 | Setting | Description |
 |---|---|
 | `templates` | List of template image paths (cropped from a positive screenshot) |
-| `roi` | `{x, y, w, h}` region of interest relative to the game window client area |
+| `roi` | `{x, y, w, h}` region of interest relative to the window client area |
 | `threshold` | Confidence threshold 0.0–1.0 (set to lowest positive score minus 0.10) |
 | `consecutive_hits_required` | Frames above threshold before alert fires (default: 2) |
 | `cooldown_seconds` | Minimum seconds between alerts for this event (default: 60) |
@@ -126,17 +158,17 @@ pytest tests/ -v
 
 ## Limitations
 
-### Game window must be visible and unobstructed
+### Target window must be visible and unobstructed
 
-v1 uses the Windows desktop compositor (mss) to capture the screen. If another window overlaps the watched region, the watcher captures whatever is on top — not the game. Keep the Last War watched region free of overlapping windows while the watcher runs.
+v1 uses the Windows desktop compositor (mss) to capture the screen. If another window overlaps the watched region, the watcher captures whatever is on top. Keep the watched region free of overlapping windows while running.
 
 ### Window size must remain fixed
 
 ROI pixel coordinates and all template images are tied to a specific window resolution. If the window is resized, all ROI coordinates become wrong and all templates fail to match silently. Fix the window to one size and set `window_width` and `window_height` accordingly. Moving the window is fine — only resizing breaks detection.
 
-### Templates must match the current game version
+### Templates must match the current application version
 
-Game updates may change icon artwork. If the game updates and an event icon changes appearance, templates must be recaptured. The watcher will fail silently (no matches) until templates are updated.
+Application updates may change icon artwork. If an event icon changes appearance, templates must be recaptured. The watcher will fail silently (no matches) until templates are updated.
 
 ### Cooldown state resets on restart
 
@@ -161,5 +193,6 @@ event_state.py          Rising-edge state machine per event
 alert_manager.py        Sound, toast, Slack, debug screenshot helpers
 screen_capture.py       mss-based ROI screen capture
 window_finder.py        pywin32 window lookup by title substring
-tests/                  pytest test suite
+tests/                  pytest test suite (44 tests)
+docs/images/            Screenshots used in this README
 ```
