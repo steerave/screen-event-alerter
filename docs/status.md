@@ -1,5 +1,25 @@
 # Project Status Log
 
+## 2026-05-03
+
+**Done:**
+- Created desktop shortcut `LastWar Watcher.lnk` launching `watcher.py` via Python 3.12 with a visible console window — close the window to stop
+- Fixed silent-startup crash: shortcut targeted Python 3.12 which lacked project deps — installed `opencv-python`, `mss`, `pywin32`, `numpy`, `win10toast`, `pytest`, `pytest-mock` into 3.12
+- Pinned `setuptools<81` in Python 3.12 because `win10toast` still imports the now-removed `pkg_resources` module
+- Verified sibling Job Search Tool (also runs on Python 3.12) is unaffected by numpy upgrade (1.26.3 → 2.4.4): 40+ LinkedIn searches scraped with zero errors
+
+**In Progress:**
+- Nothing pending
+
+**Next:**
+- Run shortcut during a real dig event to confirm alert behavior end-to-end
+- Optional: add file logging to `watcher.py` so a silent (`pythonw.exe`) shortcut variant becomes viable for unattended runs
+
+**Notes:**
+- Shortcut points at the main project folder (`C:\Users\steerave\Desktop\Claude Projects\LastWar - Alert System`), not the worktree — survives session cleanup
+- LastWar Watcher and Job Search Tool share a single Python 3.12 install; package upgrades in one affect both — per-project venvs would be a clean future fix
+- Pip's `python-jobspy requires NUMPY==1.26.3` warning was metadata-only; numpy 2.4.4 + pandas 2.3.3 + jobspy 1.1.82 work fine at runtime
+
 ## 2026-04-24
 
 **Done:**
