@@ -166,7 +166,7 @@ def _warn_if_errors(state: EventState, name: str, log: logging.Logger) -> None:
 
 def main() -> None:
     set_dpi_aware()
-    load_dotenv()
+    load_dotenv(override=True)
 
     with open("config.yaml") as f:
         config = yaml.safe_load(f)
